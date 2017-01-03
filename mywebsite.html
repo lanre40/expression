@@ -1,0 +1,239 @@
+<html>
+<head>
+<link rel ="stylesheet" type ="text/css" href = "style.css">
+<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+
+<style>
+
+.input[type = "password"] {
+
+outline: none;
+	padding: 10px;
+	display: block;
+	width: 300px;
+	border-radius: 3px;
+	border: 1px solid #eee;
+	margin: 20px auto;
+}
+
+</style></head>
+<body>
+
+<div  class = "header" >
+
+<a href= "#">Pay With Credit</a>
+
+
+
+</div>
+
+<script>
+function email_valid($email){
+    /* EMAIL VALIDATION, CHECKS IF STRING CONTAINS "@" and "."  */
+
+    if( strpos($email, "@") AND strpos($email, ".") ){
+        return TRUE;
+    }
+    else {
+        return FALSE;
+    }
+}
+
+</script>
+<?php 
+
+$email = "";
+&emailErr = "";
+
+if(empty(POST["email"])){
+
+       $emailErr = "Email is Required";
+}
+else {
+
+$email = test_input(POST[email]); 
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {    
+
+$emailErr = "Invalid Email format";
+
+}
+function test_input($data) 
+{
+     $data =  trim($data);
+	 $date = stripslashes($data);
+	 $data =  htmlspecialchars($data);
+	 return $data;
+}
+?>
+<h2>PHP FORM VALIDATION</h2>
+
+<p><span> * Required Field</p></span>
+<form id ="explore" name = "explore" method= "post" action= "explore.php">
+ 
+Email: <input type = "text" name = "email" placeholder = "someone@example.com">
+<span class= "error" id = "emailErr"> Please insert a Valid Email Address</span>
+<br><br>
+Password: <input type = "password" name = "password" placeholder = "Password">
+<span class= "error" id = "passErr"> Please insert your password</span>
+<br><br>
+
+<input type = "submit" name = "submit" value ="SUBMIT" />
+
+<script type="text/javascript">
+        jQuery.validator.addMethod("validUsername", function (value, element) {
+            return this.optional(element) || !value.match(new RegExp("^[^@]*@+$"));
+        }, "Enter a valid email address");
+
+        $(document).ready(function () {
+            $(".loginform").each(function () {
+                $(this).validate({
+                    errorPlacement: function (error, element) {
+                        error.attr("aria-hidden", "true");
+                        error.insertAfter(element);
+                        element.attr("aria-invalid", "true");
+                    },
+                    invalidHandler: function (event, validator) {
+                        
+                        $('.error.backend').remove();
+                    },
+                    rules: {
+                        username: {
+                            required: true,
+                            email: true,
+                            maxlength: 100,
+                            validUsername: true
+                        },
+                        password: {
+                            required: true,
+                            minlength: 4,
+                            maxlength: 100
+                        }
+                    },
+                    messages: {
+                        username: {
+                            required: "Enter your email",
+                            maxlength: "A maximum of 60 characters are allowed for the Adobe ID."
+                        },
+                        password: {
+                            required: "Enter your password",
+                            minlength: "The password is too short",
+                            maxlength: "The password is too long"
+                        }
+                    }
+                });
+            });
+
+            
+                $('input[type="hidden"][name="remember_me"]').remove();
+            
+
+            $("input[name='username']").change(function () {
+                this.value = $.trim(this.value);
+            });
+            //forgot password for enterprise view
+            $("#enterprise_trouble_signing_in").click(function (event) {
+                var forgot_password_form = $("#forgot_password"),
+                        username_field = $("#enterprise_username");
+                if (username_field.valid()) {
+                    forgot_password_form.find("#forgotpassword_email_address").val(username_field.val());
+                    forgot_password_form.submit();
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            });
+            $(".forgotpassword").bind("mousedown touchstart",function(event){
+                //this will kick before the spinner component and replace the href of the link
+                var userFieldVal = $("#adobeid_username").val();
+                var initialHref = $(this).attr("href");
+                if(components.utils.isEmail(userFieldVal) && initialHref.indexOf("puser="+userFieldVal)==-1){
+                   $(this).attr("href",initialHref+"&puser="+window.encodeURIComponent(userFieldVal));
+                }
+            })
+        });
+        var views = {
+            "enterprise": {
+                "onbeforeswitch": function () {
+                    $(".loginform").each(function () {
+                        $(this).validate().resetForm();
+                    });
+                    components.utils.switchLogo("enterprise");
+                    
+                            //if switcher is enabled, swithcing the ui form the link should not pass the email from one ui to another
+                            $("#enterprise_username").val("");
+                            $("#enterprise_password").val("");
+                        
+                },
+                "onafterswitch": function () {
+                    $(".backend").remove();
+                    document.title = "Sign in - Enterprise ID";
+                    
+                            $("#enterprise_username").focus();
+                        
+                }
+            },
+            "adobeid": {
+                "onbeforeswitch": function () {
+                    $(".loginform").each(function () {
+                        $(this).validate().resetForm();
+                    });
+                    components.utils.switchLogo("adobeid");
+                    
+                            $("#adobeid_username").val("");
+                            $("#adobeid_password").val("");
+                        
+                },
+                "onafterswitch": function () {
+                    $(".backend").remove();
+                    document.title = "Sign in - Adobe ID";
+                    
+                            $("#adobeid_username").focus();
+                        
+                }
+            }
+        }
+    </script>
+
+
+
+</form>
+
+<script type= "text/javascript">  
+
+function validate()
+{ 
+   var spans = document.getElementsbyTagName("span");
+   var id = document.explore.email;
+   
+   if(name.value === "" )
+   
+   {  
+       spans[0].setAttribute( "style","visibility: visible;")
+   
+   }
+   
+   var pass = document.explore.password;
+   if(email.value=== "")
+   
+   {
+      spans[1].style.visibility = "visible"
+   }
+  
+  
+
+}
+
+
+
+
+</script>
+
+
+
+</body>
+
+
+</html>
